@@ -7,7 +7,7 @@ if not exist node_modules (
 )
 rem Giong doc VieNeu (Adam bua): chua chay thi mo cua so rieng. Khong co VieNeu thi game tu dung giong Edge.
 rem Cai VieNeu-TTS o thu muc khac thi sua dong duoi cho dung duong dan.
-set VIENEU_DIR=E:\02_AI\VieNeu-TTS
+set VIENEU_DIR=D:\02_AI\VieNeu-TTS
 curl -s -m 2 http://127.0.0.1:8000/v1/voices >nul 2>&1
 if errorlevel 1 if exist "%VIENEU_DIR%\.venv\Scripts\python.exe" (
   echo Dang bat giong VieNeu, cua so rieng ten "Giong VieNeu" - dung tat cua so do khi dang live.

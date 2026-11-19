@@ -9,17 +9,17 @@ import { detectWish, GiftThanker, makePicker, OncePerPerson, RecentPeople, WishL
 import { IS_STAGE, MUTE } from '../live/page';
 import { sfx } from './sfx';
 import { GAME } from './config';
-import { KyThi, parseMc, type Ev, type View } from './thi';
+import { KyThi, type Ev, type View } from './thi';
+import { BANK } from './nganHang';
 import { loaiCmt, Treu } from './treu';
-// Mọi file câu hỏi trong src/game/cau-hoi/ (mỗi chủ đề 1 file)
-const bankFiles = import.meta.glob<string>('./cau-hoi/*.txt', { query: '?raw', import: 'default', eager: true });
-const BANK = Object.values(bankFiles).flatMap((t) => parseMc(t));
 
 const pick = makePicker();
 export const TEN_MIEN = { bac: 'miền Bắc', trung: 'miền Trung', nam: 'miền Nam' } as const;
 const GOI_MIEN = { bac: 'Bắc', trung: 'Trung', nam: 'Nam' } as const;
 const post = (url: string, body: unknown) =>
   fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => {});
+
+let xemNenTimer: ReturnType<typeof setTimeout> | null = null;
 
 /**
  * Trang stage chạy game thật (KyThi) và gửi ảnh chụp lên server.
@@ -32,7 +32,7 @@ export function useGame() {
   const [caiDatGoc, setCaiDat] = useState({ tieuDe: '', tenOngDo: '' });
   const caiDat = { tieuDe: caiDatGoc.tieuDe || GAME.tieuDeMacDinh, tenOngDo: caiDatGoc.tenOngDo || GAME.tenOngDoMacDinh };
   const [room] = useState(() => new KyThi(BANK));
-  if (import.meta.env.DEV) Object.assign(window as any, { __room: room, __sfx: sfx }); // để thử các màn trong trình duyệt
+  if (import.meta.env.DEV || new URLSearchParams(window.location.search).has('test')) Object.assign(window as any, { __room: room, __sfx: sfx }); // để thử các màn trong trình duyệt
   const [talk] = useState(() => ({
     greeter: new NameBatcher(
       GAME.greetEveryMs,
@@ -56,18 +56,32 @@ export function useGame() {
   const speak = (ev: Ev) => {
     const L = GAME.loi;
     switch (ev.t) {
+      case 'batDau':
+        if (voice.speaker) {
+          voice.prefetchBatch(room.cacLoiTrongVan());
+        }
+        return;
       case 'cho': {
         const dau = room.tuan[0];
-        // thỉnh thoảng nhắc người dẫn đầu bảng vàng tuần, để người chơi có lý do quay lại
         const them = dau && Math.random() < 0.5 ? ` ${pick(L.tuanDau)?.(speakableName(dau.name))}` : '';
         return voice.say((pick(L.cho) ?? '') + them, true);
       }
       case 'vong':
-        if (ev.vong === 0 && voice.speaker) void post('/api/da-hoi', room.used); // ván mới vừa bốc câu: lưu lại để lần sau ưu tiên câu khác
+        if (ev.vong === 0 && voice.speaker) void post('/api/da-hoi', room.used);
         return voice.say(pick(L.vong[ev.vong] ?? []) ?? '', true);
+      case 'quay':
+        // Vòng quay đang quay: tạo sẵn giọng công bố đáp án + Bạn có biết của câu này
+        voice.prefetch(room.dapAnText());
+        if (room.giaiThichText()) voice.prefetch(room.giaiThichText());
+        return;
       case 'doc': {
         const cau = room.cau;
-        voice.prefetch(room.dapAnText()); // tạo sẵn giọng công bố đáp án trong lúc mọi người trả lời
+        if (!ev.laTrangNguyen) {
+          const gioiThieu = pick(L.gioiThieuMon[ev.mon] ?? []);
+          if (gioiThieu) voice.say(gioiThieu, true);
+        }
+        voice.prefetch(room.dapAnText());
+        if (room.giaiThichText()) voice.prefetch(room.giaiThichText());
         // Đọc xong đề mới hiện 4 đáp án và tính giờ
         return voice.say(ev.text, true, () => room.cau === cau && room.docXong(Date.now()));
       }
@@ -89,7 +103,6 @@ export function useGame() {
         return voice.say(pick(L.cuuTro) ?? '', true);
       case 'dapAn': {
         const nhanh = ev.nhanh ? speakableName(ev.nhanh) : 'bạn';
-        // Cảm xúc theo tỉ lệ đúng: gần hết đúng thì cười, ít đúng thì trêu, không ai đúng thì thở dài
         const tile = ev.soNop ? ev.soDung / ev.soNop : 0;
         const nhom = tile >= 0.75 ? L.deQua : tile < 0.3 ? L.itDung : L.dungNhieu;
         const them =
@@ -97,10 +110,11 @@ export function useGame() {
           : ev.soDung === 1 ? pick(L.dungMot)?.(nhanh)
           : pick(nhom)?.(ev.soDung, nhanh);
         const khen = ev.soDung > 0 && (ev.msNhanh ?? 9e9) < 2000 ? pick(L.thanDong)?.(nhanh) : '';
-        // không ai đúng: thở dài trước rồi mới đọc đáp án
-        // "B, chim sẻ!" đã tạo sẵn nên nói ngay lúc ô nhấp nháy; lời bình đọc tiếp theo
         voice.say(room.dapAnText(), true);
         voice.say(`${them ?? ''} ${khen ?? ''}`.trim(), true);
+        if (ev.giaiThich) {
+          voice.say(room.giaiThichText(), true);
+        }
         const sau = room.docText(room.cauSo); // đề câu kế: tạo sẵn giọng
         if (sau) voice.prefetch(sau);
         return;
@@ -110,11 +124,14 @@ export function useGame() {
         if (ev.dau && Math.random() < 0.6) voice.say(pick(L.coVuSau) ?? '', true);
         return;
       case 'vinhQuy': {
-        // cộng điểm ván này vào bảng vàng tuần
         const ds = [...room.siTu.values()].filter((s) => s.diem > 0).map(({ id, name, avatar, diem }) => ({ id, name, avatar, diem }));
         if (ds.length && voice.speaker) void layTuan(post('/api/bang-tuan', { ds }));
         const [tn, bn, th] = ev.top.map(speakableName);
         voice.say(tn ? L.vinhQuy(tn, bn, th) : L.khongAiThi, true);
+        if (ev.trangMon.length) {
+          const loiMon = L.xungDanhMon(ev.trangMon.map((x) => ({ danhHieu: x.danhHieu, name: speakableName(x.name) })));
+          if (loiMon) voice.say(loiMon, true);
+        }
         if (ev.mien) voice.say(L.mienThang(TEN_MIEN[ev.mien.mien], ev.mien.diem), true);
         return;
       }
@@ -131,10 +148,8 @@ export function useGame() {
       const name = safeName(e.nickname, e.username);
       room.chat({ id: e.username, name, avatar: e.avatar, comment: e.comment, createTime: e.createTime }, Date.now());
       talk.recent.note(e.username, speakableName(name));
-      // Bình luận kiểu "khó quá", "dễ", "chào", "haha"... -> xếp hàng để ông đồ trêu lại vào khoảng lặng
       const loai = containsBanned(e.comment) ? null : loaiCmt(e.comment);
       if (loai) talk.treu.them(e.username, name, loai, Date.now());
-      // Comment có lời cầu chúc -> đọc 1 câu chúc soạn sẵn (không bao giờ đọc nguyên văn comment)
       const topic = containsBanned(e.comment) ? null : detectWish(e.comment);
       const reply = topic && pick(GAME.wishReplies[topic] ?? []);
       if (reply && talk.wishes.allow(e.username)) voice.say(reply(speakableName(name)));
@@ -144,11 +159,8 @@ export function useGame() {
       if (!IS_STAGE) return;
       const name = safeName(e.nickname, e.username);
       const coins = e.diamondCount * e.repeatCount;
-      // băng rôn cảm ơn trên màn hình (người tặng thấy mình); quà KHÔNG cho lợi thế trong game
       room.tangQua({ id: e.username, name, avatar: e.avatar, gift: e.giftName, count: e.repeatCount, coins, big: coins >= GAME.bigGiftCoins }, Date.now());
-      // Quà không cho lợi thế trong game, chỉ cảm ơn (combo 1 lần / 30 giây, quà to luôn cảm ơn)
       if (talk.gifts.shouldThank(e.username, coins, voice.waitingPriority)) {
-        // quà mức nào (xu 1 món) thì ông đồ đáp lời mức đó; quà lạ dưới 1 xu thì cảm ơn chung
         const muc = [...GAME.giftMenu].reverse().find((m) => e.diamondCount >= m.xu);
         const loi = muc && pick(muc.cam)?.(speakableName(name));
         voice.say(loi ?? GAME.thankGift(speakableName(name), e.giftName, kenh.current), true);
@@ -165,7 +177,6 @@ export function useGame() {
       if (spoken !== 'bạn') talk.greeter.add(e.username, spoken);
     },
 
-    // Tim: Thi Đình đủ tim thì cứu trợ cả phòng (loại 2 đáp án sai)
     onLike: (e) => {
       if (IS_STAGE) room.tim(e.likeCount);
     },
@@ -177,7 +188,7 @@ export function useGame() {
 
     onControl: (c) => {
       if (c.action === 'setName' && c.text) setChannelName(c.text);
-      if (!IS_STAGE) return; // chỉ trang stage làm theo lệnh, tránh 2 giọng
+      if (!IS_STAGE) return;
       const now = Date.now();
       if (c.action === 'speak' && c.text) voice.say(c.text, true);
       if (c.action === 'setRate' && c.text) voice.rate = Number(c.text) || 1;
@@ -186,12 +197,32 @@ export function useGame() {
         room.cho(now);
       }
       if (c.action === 'custom' && c.text === 'batdau') {
+        if (xemNenTimer) {
+          clearTimeout(xemNenTimer);
+          xemNenTimer = null;
+        }
         voice.stop();
         room.batDau(now);
       }
       if (c.action === 'custom' && c.text === 'bocau') {
         room.boCau(now);
-        void post('/api/da-hoi', room.used); // nhớ câu bị bỏ, tắt bật lại vẫn không hỏi
+        void post('/api/da-hoi', room.used);
+      }
+      if (c.action === 'custom' && c.text?.startsWith('xemNen:')) {
+        if (xemNenTimer) {
+          clearTimeout(xemNenTimer);
+          xemNenTimer = null;
+        }
+        const val = c.text.slice(7);
+        if (val === 'auto') {
+          room.xemNenKy = null;
+        } else {
+          room.xemNenKy = Number(val);
+          xemNenTimer = setTimeout(() => {
+            room.xemNenKy = null;
+            xemNenTimer = null;
+          }, 20_000);
+        }
       }
     },
   });
@@ -204,7 +235,10 @@ export function useGame() {
     let prev: View | null = null;
     void layTuan(fetch('/api/bang-tuan'));
     // câu chung đọc nhiều lần: tạo giọng sẵn ngay từ đầu
-    [...GAME.loi.hetGio, ...GAME.loi.nhac, ...GAME.loi.latKeo, ...GAME.loi.cuuTro, ...GAME.loi.thach, ...GAME.loi.coVuSau].forEach((t) => voice.prefetch(t));
+    const loiGioiThieu = Object.values(GAME.loi.gioiThieuMon).flat();
+    [...GAME.loi.hetGio, ...GAME.loi.nhac, ...GAME.loi.latKeo, ...GAME.loi.cuuTro, ...GAME.loi.thach, ...GAME.loi.coVuSau, ...loiGioiThieu].forEach((t) =>
+      voice.prefetch(t),
+    );
     if (MUTE) sfx.volume = sfx.musicVolume = 0;
     sfx.loadFiles();
     fetch('/api/da-hoi')
@@ -212,7 +246,7 @@ export function useGame() {
       .then((u) => Object.assign(room.used, u))
       .catch(() => {})
       .finally(() => {
-        if (!room.endsAt) room.cho(Date.now()); // chủ kênh đã bấm "Bắt đầu ngay" trong lúc chờ thì thôi
+        if (!room.endsAt) room.cho(Date.now());
         ready = true;
       });
     const id = setInterval(() => {
@@ -220,7 +254,6 @@ export function useGame() {
       const now = Date.now();
       room.tick(now);
       room.lay().forEach(speak);
-      // khoảng lặng: đang chờ trả lời (còn hơn 6 giây) hoặc chờ ván / bảng vàng, giọng đang rảnh -> trêu 1 câu
       const lang = (room.phase === 'hoi' && room.endsAt - now > 6000) || room.phase === 'cho' || room.phase === 'bangVang';
       if (lang && !voice.busy) {
         const x = talk.treu.lay(now);
@@ -230,7 +263,7 @@ export function useGame() {
       const v = room.view(now);
       setView(v);
       if (voice.speaker) sfx.watch(prev, v, voice.busy);
-      else sfx.music('tat', false); // trang phụ: tắt nhạc
+      else sfx.music('tat', false);
       prev = v;
       if (voice.speaker && now - lastPost >= 500) {
         lastPost = now;
@@ -247,7 +280,6 @@ export function useGame() {
     };
   }, []);
 
-  // Đọc bảng vàng tuần server trả về, gắn vào game để hiện lúc chờ ván mới
   async function layTuan(r: Promise<Response | void>) {
     try {
       const res = await r;

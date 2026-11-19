@@ -3,21 +3,20 @@ import type { View } from './thi';
 /**
  * Âm thanh kiểu khoa cử, trình duyệt tự tạo (không cần file, không lo bản quyền). Chỉ phát ở trang stage.
  * Muốn tiếng thật hơn: bỏ file mp3 cùng tên vào public/assets/sfx/ (vd chieng.mp3), game tự dùng file thay.
- *   trong   trống chầu dồn: mở mỗi kỳ thi
- *   hien    đàn tranh rải 4 nốt: hiện 4 đáp án, bắt đầu tính giờ
- *   nop     tiếng gảy nhỏ: có người nộp bài (giới hạn, phòng đông không rối)
- *   mo      mõ gỗ: 5 giây cuối
- *   chieng  chiêng đồng: hết giờ, công bố đáp án
- *   dung    đàn tranh vuốt lên: có người đúng
- *   truot   vuốt xuống buồn: không ai đúng
- *   phao    pháo nổ + trống: vinh quy Trạng Nguyên, quà to
- *   qua     đàn rải + chuông nhỏ: băng rôn cảm ơn quà
+ *   trong    trống chầu dồn: mở mỗi kỳ thi
+ *   quay     tiếng vòng quay môn học (lạch cạch chậm dần rồi ting!)
+ *   hien     đàn tranh rải 4 nốt: hiện 4 đáp án, bắt đầu tính giờ
+ *   nop      tiếng gảy nhỏ: có người nộp bài (giới hạn, phòng đông không rối)
+ *   mo       mõ gỗ: 5 giây cuối
+ *   chieng   chiêng đồng: hết giờ, công bố đáp án
+ *   dung     đàn tranh vuốt lên: có người đúng
+ *   truot    vuốt xuống buồn: không ai đúng
+ *   phao     pháo hoa + trống: vinh quy Trạng Nguyên, quà to
+ *   qua      đàn rải + chuông nhỏ: băng rôn cảm ơn quà
  *   donTrong trống dồn hồi hộp: hết giờ, chờ công bố đáp án
- * Nhạc nền nhiều lớp: nền ngân + trống, mõ, đàn tranh ngũ cung lúc chờ; nhịp tim + tích tắc lúc hỏi (sáng dần);
- * dồn dập 5 giây cuối; nhỏ lại khi ông đồ nói; tắt lúc vinh quy.
  */
-export type SfxName = 'trong' | 'hien' | 'nop' | 'mo' | 'chieng' | 'dung' | 'truot' | 'phao' | 'qua' | 'donTrong';
-const NAMES: SfxName[] = ['trong', 'hien', 'nop', 'mo', 'chieng', 'dung', 'truot', 'phao', 'qua', 'donTrong'];
+export type SfxName = 'trong' | 'quay' | 'hien' | 'nop' | 'mo' | 'chieng' | 'dung' | 'truot' | 'phao' | 'qua' | 'donTrong';
+const NAMES: SfxName[] = ['trong', 'quay', 'hien', 'nop', 'mo', 'chieng', 'dung', 'truot', 'phao', 'qua', 'donTrong'];
 
 // Ngũ cung Rê: Rê Fa Sol La Đô (2 quãng tám)
 const NGU_CUNG = [293.7, 349.2, 392, 440, 523.3, 587.3, 698.5, 784, 880, 1046.5];
@@ -84,7 +83,6 @@ class Sfx {
   }
 
   // ---------- nhạc nền nhiều lớp ----------
-  // nền ngân (pad) chạy suốt + theo kiểu: vui (chờ ván, bảng vàng) · hoi (nhịp tim + tích tắc, sáng dần) · gap (5 giây cuối) · lang (ông đồ đọc, chốt, công bố)
   private musicOut: GainNode | null = null;
   private pad: { osc: OscillatorNode[]; loc: BiquadFilterNode; gain: GainNode } | null = null;
   private timer: ReturnType<typeof setInterval> | null = null;
@@ -164,7 +162,6 @@ class Sfx {
       const bar = Math.floor(this.step / 16) % HOP_AM.length;
       const pos = this.step % 16;
       if (pos === 0 && this.pad) {
-        // đổi hợp âm nền mỗi câu nhạc, luyến nhẹ
         HOP_AM[bar].forEach((f, i) => {
           this.pad!.osc[i * 2].frequency.setTargetAtTime(f, this.nextAt, 0.08);
           this.pad!.osc[i * 2 + 1].frequency.setTargetAtTime(f, this.nextAt, 0.08);
@@ -184,11 +181,12 @@ class Sfx {
     const mode: Mode =
       b.phase === 'vinhQuy' ? 'tat'
       : b.phase === 'hoi' ? (b.con <= 5 ? 'gap' : 'hoi')
-      : b.phase === 'cho' || b.phase === 'vong' || b.phase === 'bangVang' ? 'vui'
+      : b.phase === 'cho' || b.phase === 'vong' || b.phase === 'quay' || b.phase === 'bangVang' ? 'vui'
       : 'lang';
     this.music(mode, speaking && mode !== 'gap', b.phase === 'hoi' ? 1 - b.con / b.tongGiay : 0);
     if (!a) return;
     if (b.phase === 'vong' && a.phase !== 'vong') this.play('trong', 500);
+    if (b.phase === 'quay' && (a.phase !== 'quay' || b.cauSo !== a.cauSo)) this.play('quay', 500);
     if (b.phase === 'hoi' && a.phase !== 'hoi') this.play('hien', 300);
     if (b.phase === 'hoi' && b.soNop > a.soNop) this.play('nop', 180);
     if (b.phase === 'hoi' && b.con <= 5 && b.con >= 1 && b.con !== this.lastMo) {
@@ -203,8 +201,8 @@ class Sfx {
     }
     if (b.phase === 'vinhQuy' && a.phase !== 'vinhQuy') this.play('phao', 1000);
     if (b.qua && b.qua.at !== a.qua?.at) this.play(b.qua.big ? 'phao' : 'qua', 300);
-    if (b.cuu?.loai.length && !a.cuu?.loai.length) this.play('dung', 300); // tim đủ, loại 2 đáp án sai
-    if (b.latKeo && !a.latKeo) this.play('trong', 500); // vào câu lật kèo
+    if (b.cuu?.loai.length && !a.cuu?.loai.length) this.play('dung', 300);
+    if (b.latKeo && !a.latKeo) this.play('trong', 500);
   }
 }
 
@@ -358,31 +356,37 @@ function chiengAt(c: AudioContext, out: AudioNode, t: number, gain: number, base
 
 type Synth = (c: AudioContext, v: number) => void;
 const SYNTH: Record<SfxName, Synth> = {
-  // trống chầu dồn: tùng... tùng tùng tùng TÙNG
   trong: (c, v) => {
     const t = c.currentTime;
     [0, 0.42, 0.62, 0.82, 1.08].forEach((s, i) => trongAt(c, c.destination, t + s, v * (i === 4 ? 1.6 : 1.1)));
   },
-  // rải 4 nốt đàn đi lên
+  // vòng quay môn học: tiếng cạch cạch nhanh rồi chậm dần, kết bằng tiếng đàn ting sáng
+  quay: (c, v) => {
+    const t = c.currentTime;
+    let s = 0;
+    for (let i = 0; i < 18 && s < 1.85; i++) {
+      const k = i / 18;
+      moAt(c, c.destination, t + s, v * (0.55 + k * 0.45), 1100 + (i % 4) * 180);
+      s += 0.045 + k * k * 0.18;
+    }
+    gay(c, c.destination, NGU_CUNG[7], t + 1.9, 0.8, v * 0.85);
+    gay(c, c.destination, NGU_CUNG[9], t + 1.97, 0.9, v * 0.9);
+  },
   hien: (c, v) => {
     const t = c.currentTime;
     [4, 6, 7, 9].forEach((n, i) => gay(c, c.destination, NGU_CUNG[n], t + i * 0.07, 0.9, v * 0.8));
   },
-  // gảy 1 nốt nhỏ ngẫu nhiên trong ngũ cung
   nop: (c, v) => gay(c, c.destination, NGU_CUNG[5 + Math.floor(Math.random() * 5)], c.currentTime, 0.5, v * 0.25),
   mo: (c, v) => moAt(c, c.destination, c.currentTime, v * 1.6),
   chieng: (c, v) => chiengAt(c, c.destination, c.currentTime, v * 1.2),
-  // vuốt dây đi lên: vui
   dung: (c, v) => {
     const t = c.currentTime;
     [0, 1, 2, 3, 4, 5, 6, 7, 8].forEach((n, i) => gay(c, c.destination, NGU_CUNG[n], t + i * 0.045, 0.8, v * 0.6));
   },
-  // vuốt xuống chậm, trầm: tiếc
   truot: (c, v) => {
     const t = c.currentTime;
     [6, 4, 2, 0].forEach((n, i) => gay(c, c.destination, NGU_CUNG[n] / 2, t + i * 0.18, 1.2, v * 0.7));
   },
-  // trống dồn 2,4 giây: nhanh dần, to dần
   donTrong: (c, v) => {
     const t = c.currentTime;
     let s = 0;
@@ -393,13 +397,11 @@ const SYNTH: Record<SfxName, Synth> = {
       s += 0.12 - k * 0.07;
     }
   },
-  // rải đàn đi lên + 2 tiếng chuông nhỏ: cảm ơn quà
   qua: (c, v) => {
     const t = c.currentTime;
     [5, 7, 8, 9].forEach((n, i) => gay(c, c.destination, NGU_CUNG[n], t + i * 0.06, 0.8, v * 0.7));
     [0.3, 0.42].forEach((s) => gay(c, c.destination, NGU_CUNG[9] * 2, t + s, 0.6, v * 0.4));
   },
-  // pháo đùng đoàng tràng dài + chiêng + trống
   phao: (c, v) => {
     const t = c.currentTime;
     for (let i = 0; i < 28; i++) noiseAt(c, c.destination, t + i * 0.07 + Math.random() * 0.05, 0.06, v * (0.8 + Math.random() * 0.6), 'highpass', 1200 + Math.random() * 2000);

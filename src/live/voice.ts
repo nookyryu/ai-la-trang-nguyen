@@ -44,14 +44,52 @@ class Voice {
 
   /** Tạo giọng trước (server giữ sẵn), tới lúc đọc thì phát ngay không phải chờ */
   private daTao = new Set<string>();
+  private prefetchQueue: string[] = [];
+  private activePrefetches = 0;
+  private readonly MAX_CONCURRENT_PREFETCH = 2;
+
   prefetch(text: string) {
     const t = text.trim();
     if (!this.enabled || !t || this.daTao.has(t)) return;
     this.daTao.add(t);
-    if (this.daTao.size > 300) this.daTao.clear();
+    if (this.daTao.size > 500) {
+      const first = this.daTao.values().next().value;
+      if (first) this.daTao.delete(first);
+    }
     fetch(`/api/tts?rate=${this.rate}&text=${encodeURIComponent(t)}`)
       .then((r) => r.arrayBuffer())
       .catch(() => this.daTao.delete(t));
+  }
+
+  /** Tạo trước danh sách lời đọc (cả ván), gửi lần lượt tối đa 2 câu cùng lúc */
+  prefetchBatch(texts: string[]) {
+    if (!this.speaker || !this.enabled) return;
+    for (const raw of texts) {
+      const t = raw.trim();
+      if (t && !this.daTao.has(t) && !this.prefetchQueue.includes(t)) {
+        this.prefetchQueue.push(t);
+      }
+    }
+    this.drainPrefetchQueue();
+  }
+
+  private drainPrefetchQueue() {
+    while (this.activePrefetches < this.MAX_CONCURRENT_PREFETCH && this.prefetchQueue.length > 0) {
+      const t = this.prefetchQueue.shift()!;
+      this.daTao.add(t);
+      if (this.daTao.size > 500) {
+        const first = this.daTao.values().next().value;
+        if (first) this.daTao.delete(first);
+      }
+      this.activePrefetches++;
+      fetch(`/api/tts?rate=${this.rate}&text=${encodeURIComponent(t)}`)
+        .then((r) => r.arrayBuffer())
+        .catch(() => this.daTao.delete(t))
+        .finally(() => {
+          this.activePrefetches--;
+          this.drainPrefetchQueue();
+        });
+    }
   }
 
   stop() {

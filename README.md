@@ -1,21 +1,24 @@
-# Ai Là Trạng Nguyên
+# Ai Là Trạng Nguyên – Mùa 2: Trạng Nguyên Muôn Môn
 
-Game show đố vui cho **TikTok LIVE**, lấy cảm hứng từ khoa cử ngày xưa. Ông đồ cầm mic đọc câu hỏi và 4 đáp án, người xem gõ **A, B, C hoặc D** vào bình luận. Mỗi ván 20 câu qua 4 kỳ thi: khảo hạch trường làng, thi Hương, thi Hội, thi Đình. Hết ván, ba người điểm cao nhất đỗ Trạng Nguyên, Bảng Nhãn, Thám Hoa và được vinh danh trên màn hình.
+Game show đố vui cho **TikTok LIVE**, lấy cảm hứng từ khoa cử ngày xưa. Ông đồ cầm mic đọc câu hỏi và 4 đáp án, người xem gõ **A, B, C hoặc D** vào bình luận. Mỗi ván **16 câu qua 4 kỳ thi** (Khảo hạch trường làng, Thi Hương, Thi Hội, Thi Đình), quay **Vòng quay môn học** qua 8 môn + 1 câu Toán nhanh. Hết ván, ba người điểm cao nhất đỗ Trạng Nguyên, Bảng Nhãn, Thám Hoa, và người giỏi từng môn được phong **Trạng chuyên môn** trên màn hình.
 
 Game chạy trên máy tính của bạn, gắn vào TikTok LIVE Studio như một nguồn Link. Không cần biết lập trình, chỉ cần làm theo các bước bên dưới.
 
 ## Game có gì
 
-- **Gần 5.000 câu hỏi tiếng Việt** chia 14 chủ đề: lịch sử Việt Nam, địa lý, văn học, ca dao tục ngữ, khoa học, sức khoẻ, động thực vật, văn hoá ẩm thực, thế giới, phát minh, nghệ thuật, thể thao, khoa cử và danh nhân, đố mẹo. Câu khó dần theo kỳ thi. Mỗi kỳ có thêm một câu toán nhẩm máy tự ra nên không bao giờ hết.
-- **Điểm theo tốc độ**: đúng càng nhanh điểm càng cao, sai bị trừ. Tốc độ tính theo giờ TikTok ghi lúc người xem bấm gửi, không phụ thuộc mạng chậm hay nhanh. Câu cuối ván điểm nhân đôi.
+- **Bộ câu hỏi Mùa 2 (465 câu mới có "Bạn có biết?") + kho dự phòng 4.974 câu**: chia 7 môn (Lịch sử, Địa lý, Khoa học, Hóa học, Văn học, Văn hóa, Xã hội) + Đố mẹo (ở Kỳ 3–4) + 1 câu Toán nhanh tự sinh ở Kỳ 2. Độ khó 5 mức tăng dần từ Kỳ 1 đến Kỳ 4.
+- **Vòng quay môn học & giao diện đổi màu theo môn**: trước mỗi câu có vòng quay môn học (~2 giây), khung bảng đen + 4 ô đáp án + biểu tượng SVG động đổi sắc theo từng môn, kèm thang độ khó 5 mức và đồng hồ tròn tiến độ.
+- **Thẻ "💡 Bạn có biết?"**: sau khi công bố đáp án, màn hình hiện thẻ giải thích 1–2 câu thú vị và ông đồ đọc to cho cả phòng cùng học thêm kiến thức mới.
+- **Danh hiệu Trạng chuyên môn**: đúng nhiều nhất mỗi môn (từ 2 câu đúng trở lên, bằng thì nhanh hơn) được phong **Trạng Sử, Trạng Địa, Trạng Khoa, Trạng Hóa, Trạng Văn, Trạng Phong Tục, Trạng Đời, Trạng Mẹo** trên Bảng vàng và màn Vinh quy.
+- **Điểm theo tốc độ & Câu hỏi Trạng Nguyên ×2**: đúng càng nhanh điểm càng cao, sai bị trừ. Câu cuối ván (Câu 16, mức 5) là **Câu hỏi Trạng Nguyên**, điểm cộng và trừ đều nhân đôi.
 - **Thi đua 3 miền**: gõ Bắc, Trung hoặc Nam để vào phe, điểm cả phe cộng dồn.
-- **Cứu trợ bằng tim**: ở thi Đình, cả phòng thả đủ tim thì ông đồ loại 2 đáp án sai.
+- **Cứu trợ bằng tim**: ở Thi Đình, cả phòng thả đủ 200 tim thì ông đồ loại 2 đáp án sai.
 - **Bảng vàng** sau mỗi kỳ, **bảng vàng tuần** cộng điểm nhiều ván, dấu 🏆 🎓 🔥 cạnh tên người chơi giỏi.
-- **Ông đồ biết nói chuyện**: đọc đề, công bố đáp án có cười có thở dài, trêu người than khó, hô tên người vừa vượt lên dẫn đầu, cảm ơn quà theo từng món. Ông **không bao giờ đọc nguyên văn bình luận**, chỉ dùng câu soạn sẵn có chèn tên, nên không ai bắt ông nói bậy được.
+- **Ông đồ biết nói chuyện**: giới thiệu môn học, đọc đề, công bố đáp án kèm "Bạn có biết?", xướng danh Trạng chuyên môn, trêu người than khó, hô tên người vượt lên dẫn đầu, cảm ơn quà theo từng món. Ông **không bao giờ đọc nguyên văn bình luận**, chỉ dùng câu soạn sẵn có chèn tên.
 - **Quà**: băng rôn có avatar và tên người tặng, quà từ 99 xu có pháo giấy. Quà **không cho lợi thế gì trong game**, đúng quy định TikTok.
-- **Âm thanh tự tạo**: nhạc nền đàn tranh, trống dồn lúc hết giờ, chiêng lúc công bố, pháo lúc vinh quy. Không dùng nhạc có bản quyền.
-- **Sân thi đầu làng**: câu hỏi viết phấn lên bảng đen dưới mái tranh. Ai nộp bài thì được ngồi một bàn, tên hiện trên đầu, điểm cao ngồi các hàng giữa. Ai chưa có ghế thì tên hiện trên đám trẻ con chạy lên chạy xuống lối giữa. Hai bên sân có các cụ ngồi xem, cây đa đung đưa, lá rơi lác đác. Chữ trên mái tranh và tên ông đồ đổi được ở trang điều khiển.
-- **Chạy cả buổi**: hết ván tự sang ván mới; mất kết nối TikTok thì tự kết nối lại.
+- **Âm thanh tự tạo**: nhạc nền đàn tranh ngũ cung, tiếng vòng quay môn học, trống dồn lúc hết giờ, chiêng lúc công bố, pháo hoa lúc vinh quy. Không dùng nhạc có bản quyền.
+- **Sân thi 4 kỳ thi**: chuyển cảnh từ sân trường làng → Thi Hương có cờ ngũ sắc và đôi lọng → trường thi Huyện Phủ → Hoàng thành Kinh Đô. Sĩ tử nộp bài được ngồi bàn, tên hiện trên đầu; trẻ con chạy giữa sân mang tên người chưa có ghế.
+- **Chạy cả buổi**: hết ván tự sang ván mới; kết nối TikTok miễn phí qua `ttl-live` ẩn danh và tự kết nối lại khi rớt mạng.
 
 ## Cần chuẩn bị
 
@@ -98,22 +101,22 @@ Trên trang điều khiển có các nút **Giả lập 1 người / 60 người
 **Muốn giọng "Adam bựa" có cười, thở dài** như bản của tác giả, bạn cài thêm [VieNeu-TTS](https://github.com/pnnbao97/VieNeu-TTS), bộ đọc tiếng Việt mã nguồn mở chạy ngay trên máy:
 
 1. Cài VieNeu-TTS theo hướng dẫn trong repo của họ. Máy có card NVIDIA sẽ đọc nhanh; máy chỉ có CPU vẫn chạy được nhưng chậm hơn.
-2. Mở `BAT-LIVE.bat` bằng Notepad, sửa dòng `set VIENEU_DIR=E:\02_AI\VieNeu-TTS` thành thư mục bạn đã cài.
+2. Mở `BAT-LIVE.bat` bằng Notepad, sửa dòng `set VIENEU_DIR=D:\02_AI\VieNeu-TTS` thành thư mục bạn đã cài.
 3. Lưu lại, bấm đúp BAT-LIVE như bình thường. Nó sẽ tự mở thêm cửa sổ "Giọng VieNeu". Đang live thì đừng tắt cửa sổ đó.
 
-VieNeu tắt hoặc lỗi giữa chừng thì game tự quay về giọng Edge, ông đồ không bị câm.
+VieNeu tắt hoặc lỗi giữa chừng thì game tự quay về giọng Edge, ông đồ không bị câm. Đầu mỗi ván game tự tạo trước giọng cả ván; nếu trang điều khiển báo "đang dùng giọng Edge" thì mở lại cửa sổ "Giọng VieNeu".
 
 ## Tự chỉnh game
 
 Các file bạn hay sửa nhất đều mở được bằng Notepad. Sửa xong thì làm mới trang stage trong LIVE Studio (chuột phải vào nguồn, chọn Làm mới).
 
-- **Câu hỏi**: `src/game/cau-hoi/*.txt`, mỗi chủ đề một file. Mỗi dòng một câu:
+- **Câu hỏi Mùa 2**: `src/game/cau-hoi-moi/*.txt` (8 file theo môn), nhóm độ khó `[1]`..`[5]`. Mỗi dòng 6 cột:
   ```
-  câu hỏi | ĐÁP ÁN ĐÚNG | sai | sai | sai
+  câu hỏi | ĐÁP ÁN ĐÚNG | sai | sai | sai | Bạn có biết
   ```
-  Đáp án đúng luôn để ở vị trí thứ hai, game tự xáo A B C D. Dòng `[de]`, `[vua]`, `[kho]`, `[dinh]`, `[meo]` là nhóm độ khó (khảo hạch, thi Hương, thi Hội, thi Đình, đố mẹo). Quy tắc viết câu có ở `src/game/cau-hoi/HUONG-DAN.md`. Viết xong chạy `node tools/kiem-tra-cau-hoi.mjs` để soát lỗi.
+  Đáp án đúng luôn ở vị trí thứ 2, game tự xáo A B C D. Kho dự phòng cũ vẫn giữ tại `src/game/cau-hoi/*.txt` (5 cột). Quy tắc viết câu ở `src/game/cau-hoi/HUONG-DAN.md`. Viết xong chạy `node tools/kiem-tra-cau-hoi.mjs` để soát lỗi và xem bảng đếm môn × mức.
 - **Lời ông đồ, số liệu luật chơi**: `src/game/config.ts`. Mọi câu ông đồ nói, thời gian từng kỳ, điểm, số tim cứu trợ... đều ở đây.
-- **Ảnh**: nền ở `public/assets/bg/nen2.jpg` (1080 × 1920). Ảnh ông đồ gốc ở `public/assets/MC/`, tam khôi ở `public/assets/top/`, sĩ tử, trẻ con và các cụ ở `public/assets/nhan-vat/`. Thay ảnh xong thì chạy `node tools/tach-nen.mjs` (ông đồ, tam khôi) hoặc `node tools/cat-nhan-vat.mjs` (nhân vật sân thi) để tách nền trắng.
+- **Ảnh nền theo 4 kỳ thi**: đặt trong `public/assets/bg/`: Kỳ 1 `nen2.jpg`, Kỳ 2 `nen-thi-huong.jpg`, Kỳ 3 `nen-thi-hoi.jpg`, Kỳ 4 `nen-thi-dinh.jpg`. Kích thước chuẩn 1080 × 1920, dung lượng mỗi ảnh tối đa khoảng 800 KB (JPG chất lượng 85 hoặc WebP). Ảnh mới phải giữ nguyên bố cục (bảng đen, mái tranh, bàn ghế) như `nen2.jpg`. Thay ảnh nhân vật gốc ở `public/assets/MC/`, tam khôi ở `public/assets/top/`, sĩ tử, trẻ con và các cụ ở `public/assets/nhan-vat/`. Thay ảnh xong thì chạy `node tools/tach-nen.mjs` (ông đồ, tam khôi) hoặc `node tools/cat-nhan-vat.mjs` (nhân vật sân thi) để tách nền trắng.
 
 ## Gặp lỗi thì sao
 
@@ -136,3 +139,5 @@ Các file bạn hay sửa nhất đều mở được bằng Notepad. Sửa xong
 Mã nguồn dùng giấy phép [MIT](LICENSE). Ảnh ông đồ, ảnh tam khôi và ảnh nền (`public/assets/`, `ai-la-trang-nguyen.png`) thuộc về tác giả. Muốn dùng cho kênh của mình thì nên thay bằng ảnh riêng.
 
 Game lấy cảm hứng từ các game show đố vui trên truyền hình nhưng không dùng tên, giao diện, nhạc hay câu thoại của chương trình nào.
+
+> Ghi chú: thư mục `ttl-live/` (thư viện kết nối TikTok, có kèm mã ký của TikTok) **không** đưa lên repo này. Muốn chạy kết nối TikTok, tự đặt thư viện ttl-live vào thư mục `ttl-live/` rồi chạy `npm install` trong đó.

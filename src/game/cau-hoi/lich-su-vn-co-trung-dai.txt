@@ -56,7 +56,7 @@ Người thiếu niên bóp nát quả cam vì không được dự bàn việc 
 "Ta thà làm quỷ nước Nam chứ không thèm làm vương đất Bắc" là câu nói của ai? | Trần Bình Trọng | Trần Quốc Toản | Trần Hưng Đạo | Lý Thường Kiệt
 Hội nghị Diên Hồng nhà Trần mời ai đến bàn việc đánh giặc? | Các bô lão | Các vương hầu | Các tướng trẻ | Các sứ thần
 Quân sĩ nhà Trần thích lên cánh tay hai chữ gì? | Sát Thát | Quyết chiến | Trung quân | Phá Nguyên
-"Bệ hạ chém đầu thần trước rồi hãy hàng" là lời của ai? | Trần Hưng Đạo | Trần Thủ Độ | Trần Quang Khải | Trần Bình Trọng
+Đền Kiếp Bạc là nơi thờ vị danh tướng nào của nhà Trần? | Trần Hưng Đạo | Trần Thủ Độ | Trần Quang Khải | Trần Bình Trọng
 Nhà Hồ thay thế triều đại nào? | Nhà Trần | Nhà Lý | Nhà Lê | Nhà Mạc
 Ai là người lập ra nhà Hồ? | Hồ Quý Ly | Hồ Hán Thương | Hồ Nguyên Trừng | Trần Thủ Độ
 Hồ Quý Ly lập nhà Hồ, đặt tên nước là gì? | Đại Ngu | Đại Việt | Đại Cồ Việt | Đại Nam
@@ -148,13 +148,13 @@ Phùng Hưng được nhân dân tôn là gì? | Bố Cái Đại Vương | Mai 
 Khởi nghĩa Mai Thúc Loan và Phùng Hưng chống ách đô hộ của nhà nào? | Nhà Đường | Nhà Hán | Nhà Lương | Nhà Tống
 Năm 905, ai giành quyền tự chủ cho người Việt? | Khúc Thừa Dụ | Dương Đình Nghệ | Ngô Quyền | Kiều Công Tiễn
 Năm 931, ai đánh đuổi quân Nam Hán lần thứ nhất? | Dương Đình Nghệ | Ngô Quyền | Khúc Thừa Dụ | Kiều Công Tiễn
-Dương Đình Nghệ bị ai giết hại để cướp quyền? | Kiều Công Tiễn | Dương Tam Kha | Hoằng Tháo | Đỗ Cảnh Thạc
+Dương Đình Nghệ bị bộ tướng nào hãm hại để cướp quyền? | Kiều Công Tiễn | Dương Tam Kha | Hoằng Tháo | Đỗ Cảnh Thạc
 Ngô Quyền là con rể của ai? | Dương Đình Nghệ | Khúc Thừa Dụ | Kiều Công Tiễn | Đinh Công Trứ
 Chỉ huy quân Nam Hán tử trận trên sông Bạch Đằng năm 938 là ai? | Hoằng Tháo | Lưu Cung | Hầu Nhân Bảo | Ô Mã Nhi
 Sau khi Ngô Quyền mất, ai cướp ngôi nhà Ngô? | Dương Tam Kha | Kiều Công Tiễn | Đỗ Cảnh Thạc | Đinh Bộ Lĩnh
 Lê Hoàn được ai trao áo long cổn để lên ngôi vua? | Dương Vân Nga | Ỷ Lan | Lý Chiêu Hoàng | Huyền Trân
 Lê Hoàn lên ngôi vua vào năm nào? | 980 | 968 | 1009 | 939
-Tướng nhà Tống bị giết trong cuộc kháng chiến năm 981 là ai? | Hầu Nhân Bảo | Quách Quỳ | Triệu Tiết | Hoằng Tháo
+Tướng nhà Tống tử trận trong cuộc kháng chiến chống Tống năm 981 là ai? | Hầu Nhân Bảo | Quách Quỳ | Triệu Tiết | Hoằng Tháo
 Ai là vị vua thứ hai của nhà Lý? | Lý Thái Tông | Lý Thánh Tông | Lý Nhân Tông | Lý Anh Tông
 Vua nào cho xây chùa Một Cột ở Thăng Long? | Lý Thái Tông | Lý Thái Tổ | Lý Thánh Tông | Lý Nhân Tông
 Bộ luật thành văn đầu tiên của nước ta có tên là gì? | Hình thư | Luật Hồng Đức | Hoàng Việt luật lệ | Quốc triều hình luật
@@ -184,7 +184,7 @@ Nhà Hồ đóng đô ở thành nào? | Tây Đô | Đông Đô | Đông Kinh |
 Cuộc kháng chiến của nhà Hồ chống quân Minh thất bại năm nào? | 1407 | 1400 | 1418 | 1427
 Khởi nghĩa Lam Sơn bùng nổ vào năm nào? | 1418 | 1428 | 1407 | 1427
 Khi dựng cờ khởi nghĩa, Lê Lợi tự xưng là gì? | Bình Định Vương | Bắc Bình Vương | Đông Định Vương | Trưng Vương
-Tướng nhà Minh bị nghĩa quân Lam Sơn chém ở ải Chi Lăng là ai? | Liễu Thăng | Vương Thông | Mộc Thạnh | Tôn Sĩ Nghị
+Tướng nhà Minh tử trận ở ải Chi Lăng trước nghĩa quân Lam Sơn là ai? | Liễu Thăng | Vương Thông | Mộc Thạnh | Tôn Sĩ Nghị
 Thời Lê sơ, thành Thăng Long được đổi tên là gì? | Đông Kinh | Đông Đô | Tây Đô | Đại La
 Nguyễn Trãi bị hàm oan trong vụ án nào? | Vụ án Lệ Chi Viên | Vụ án Đông Quan | Vụ án Bình Than | Vụ án Vạn Kiếp
 Thời Lê Thánh Tông, cả nước chia thành bao nhiêu đạo thừa tuyên? | 13 | 5 | 12 | 15
@@ -228,7 +228,7 @@ Sông Như Nguyệt nơi Lý Thường Kiệt chặn quân Tống còn gọi là
 Cuộc kháng chiến chống Tống năm 1075 đến 1077 diễn ra dưới thời vua nào? | Lý Nhân Tông | Lý Thánh Tông | Lý Thái Tông | Lý Anh Tông
 Hội nghị Bình Than nhà Trần triệu tập những ai đến bàn kế đánh giặc? | Vương hầu, quan lại | Các bô lão | Nông dân các làng | Sứ thần các nước
 "Phú sông Bạch Đằng" là tác phẩm của ai? | Trương Hán Siêu | Trần Quang Khải | Nguyễn Trãi | Phạm Sư Mạnh
-Ai dâng "Thất trảm sớ" xin chém bảy tên nịnh thần thời Trần? | Chu Văn An | Trần Khát Chân | Lê Văn Hưu | Trương Hán Siêu
+Danh nho nào dâng "Thất trảm sớ" xin trị tội bảy nịnh thần thời Trần? | Chu Văn An | Trần Khát Chân | Lê Văn Hưu | Trương Hán Siêu
 Nhà Minh xâm lược nước ta năm 1406 lấy cớ gì? | Phù Trần diệt Hồ | Phù Lê diệt Trịnh | Phù Lê diệt Mạc | Phù Lý diệt Trần
 Sau khi đánh bại nhà Hồ, nhà Minh đổi nước ta thành quận gì? | Quận Giao Chỉ | Quận Cửu Chân | Quận Nhật Nam | Quận Nam Hải
 Những năm đầu khởi nghĩa, nghĩa quân Lam Sơn ba lần rút lên núi nào? | Núi Chí Linh | Núi Yên Tử | Núi Ba Vì | Núi Nưa
@@ -278,7 +278,7 @@ Kẻ ám hại vua Đinh Tiên Hoàng và Đinh Liễn năm 979 là ai? | Đỗ 
 Trước khi lên ngôi, Lê Hoàn giữ chức gì dưới triều Đinh? | Thập đạo tướng quân | Thái úy | Điện tiền chỉ huy sứ | Quốc công tiết chế
 Dương Vân Nga là hoàng hậu của Đinh Tiên Hoàng và vị vua nào? | Lê Hoàn | Lý Công Uẩn | Đinh Liễn | Ngô Xương Văn
 Năm 987, vị vua nào xuống cày ruộng tịch điền ở núi Đọi? | Lê Hoàn | Đinh Tiên Hoàng | Lý Thái Tông | Lý Thái Tổ
-Vua nhà Tiền Lê nào chỉ làm vua 3 ngày thì bị em giết? | Lê Long Việt | Lê Long Đĩnh | Lê Long Tích | Đinh Toàn
+Vua nhà Tiền Lê nào chỉ ở ngôi 3 ngày thì bị em cướp ngôi? | Lê Long Việt | Lê Long Đĩnh | Lê Long Tích | Đinh Toàn
 Vua Tiền Lê nào bị gọi là "Lê Ngọa Triều" vì nằm khi thiết triều? | Lê Long Đĩnh | Lê Hoàn | Lê Long Việt | Đinh Toàn
 Trước khi lên ngôi, Lý Công Uẩn giữ chức gì dưới triều Tiền Lê? | Điện tiền chỉ huy sứ | Thập đạo tướng quân | Thái sư | Quốc công tiết chế
 Thiền sư nào là thầy dạy của Lý Công Uẩn thuở nhỏ? | Vạn Hạnh | Khuông Việt | Pháp Thuận | Mãn Giác
@@ -297,7 +297,7 @@ Tướng Mông Cổ chỉ huy cuộc xâm lược Đại Việt lần thứ nh�
 Năm 1258, quân Trần phản công đánh bại quân Mông Cổ tại đâu? | Đông Bộ Đầu | Chương Dương | Hàm Tử | Vạn Kiếp
 Trần Hưng Đạo là con của ai? | Trần Liễu | Trần Thủ Độ | Trần Thái Tông | Trần Thừa
 Trần Hưng Đạo được giao chức gì để thống lĩnh quân đội chống Nguyên? | Quốc công tiết chế | Thái sư | Thượng tướng quân | Điện tiền chỉ huy sứ
-Năm 1285, tướng Nguyên Toa Đô bị quân Trần chém ở trận nào? | Trận Tây Kết | Trận Chương Dương | Trận Vân Đồn | Trận Đông Bộ Đầu
+Năm 1285, tướng Nguyên Toa Đô tử trận trước quân Trần ở trận nào? | Trận Tây Kết | Trận Chương Dương | Trận Vân Đồn | Trận Đông Bộ Đầu
 Ai chỉ huy quân Trần thắng trận Chương Dương năm 1285? | Trần Quang Khải | Trần Nhật Duật | Trần Khánh Dư | Trần Quốc Toản
 Ai chỉ huy quân Trần thắng trận Hàm Tử năm 1285? | Trần Nhật Duật | Trần Quang Khải | Trần Khánh Dư | Phạm Ngũ Lão
 Bài thơ "Phò giá về kinh" (Tụng giá hoàn kinh sư) là của ai? | Trần Quang Khải | Trần Nhân Tông | Phạm Ngũ Lão | Trần Hưng Đạo
@@ -310,7 +310,7 @@ Ba vị tổ Thiền phái Trúc Lâm gồm Trần Nhân Tông, Pháp Loa và ai
 Nhờ cuộc hôn nhân của Huyền Trân, Đại Việt có thêm hai châu nào? | Châu Ô, châu Lý | Châu Hoan, châu Ái | Châu Phong, châu Giao | Châu Lâm, châu Nhật
 Ai cướp ngôi nhà Trần năm 1369, sau bị phế truất? | Dương Nhật Lễ | Hồ Quý Ly | Mạc Đăng Dung | Kiều Công Tiễn
 Vua Chăm Pa nào nhiều lần đánh ra Thăng Long cuối thời Trần? | Chế Bồng Nga | Chế Mân | Chế Củ | Trà Toàn
-Tướng nhà Trần nào đánh bại, giết Chế Bồng Nga năm 1390? | Trần Khát Chân | Trần Khánh Dư | Trần Nhật Duật | Trần Nguyên Hãn
+Tướng nhà Trần nào chỉ huy trận đánh hạ vua Chiêm Chế Bồng Nga năm 1390? | Trần Khát Chân | Trần Khánh Dư | Trần Nhật Duật | Trần Nguyên Hãn
 Vua Trần nào tin dùng, trao nhiều quyền cho Hồ Quý Ly? | Trần Nghệ Tông | Trần Nhân Tông | Trần Anh Tông | Trần Thái Tông
 Trước khi đổi sang họ Hồ, Hồ Quý Ly mang họ gì? | Họ Lê | Họ Trần | Họ Nguyễn | Họ Lý
 Hồ Quý Ly lên ngôi chưa được bao lâu thì nhường ngôi cho ai? | Hồ Hán Thương | Hồ Nguyên Trừng | Trần Thiếu Đế | Trần Ngỗi
@@ -332,7 +332,7 @@ Năm 1427, thành nào bị nghĩa quân Lam Sơn hạ, chặn đường viện 
 Tập thư Nguyễn Trãi viết cho tướng Minh trong khởi nghĩa Lam Sơn tên là gì? | Quân trung từ mệnh tập | Bình Ngô đại cáo | Ức Trai thi tập | Lam Sơn thực lục
 Thời Lê Thái Tổ, cả nước được chia thành mấy đạo? | 5 đạo | 13 đạo | 12 đạo | 7 đạo
 Cuốn sách địa lý "Dư địa chí" là của ai? | Nguyễn Trãi | Lê Quý Đôn | Phan Huy Chú | Ngô Sĩ Liên
-Ai giết vua Lê Nhân Tông, cướp ngôi năm 1459? | Lê Nghi Dân | Lê Tư Thành | Mạc Đăng Dung | Trịnh Kiểm
+Ai chủ mưu đoạt ngôi vua Lê Nhân Tông vào năm 1459? | Lê Nghi Dân | Lê Tư Thành | Mạc Đăng Dung | Trịnh Kiểm
 Vua Lê Thánh Tông tên húy là gì? | Lê Tư Thành | Lê Nguyên Long | Lê Bang Cơ | Lê Nghi Dân
 Thời Lê Thánh Tông, bộ bản đồ nào của cả nước được hoàn thành? | Hồng Đức bản đồ | Dư địa chí | Phủ biên tạp lục | Thiên Nam tứ chí
 Sau năm 1471, vua Lê Thánh Tông lập đạo thừa tuyên nào ở phía Nam? | Quảng Nam | Thuận Hóa | Gia Định | Phú Yên
@@ -360,7 +360,7 @@ Gò Đống Đa gắn với cái chết của tướng nhà Thanh nào? | Sầm 
 Năm 1789, quân Thanh tháo chạy, chen nhau qua cầu phao trên sông nào? | Sông Hồng | Sông Đuống | Sông Cầu | Sông Thương
 Nguyễn Thiếp, người được vua Quang Trung trọng dụng, được gọi là gì? | La Sơn phu tử | Bạch Vân cư sĩ | Ức Trai | Hải Thượng Lãn Ông
 Vua Quang Toản lấy niên hiệu là gì? | Cảnh Thịnh | Thái Đức | Chiêu Thống | Cảnh Hưng
-Tướng của Nguyễn Ánh nào tự thiêu khi thành Quy Nhơn bị Tây Sơn vây năm 1801? | Võ Tánh | Lê Văn Duyệt | Nguyễn Văn Thành | Lê Văn Khôi
+Tướng nào của chúa Nguyễn đã hy sinh khi trấn thủ thành Quy Nhơn năm 1801? | Võ Tánh | Lê Văn Duyệt | Nguyễn Văn Thành | Lê Văn Khôi
 Ai là Tổng trấn Bắc thành đầu tiên thời Gia Long? | Nguyễn Văn Thành | Lê Văn Duyệt | Nguyễn Công Trứ | Lê Chất
 Danh tướng Lê Văn Duyệt thường được gọi bằng danh xưng nào? | Tả quân | Hữu quân | Tiền quân | Hậu quân
 Kinh thành Huế kết hợp kiến trúc phương Đông với lối thành của kỹ sư quân sự Pháp nào? | Vauban | Eiffel | Haussmann | Le Corbusier

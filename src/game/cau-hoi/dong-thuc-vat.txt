@@ -184,7 +184,7 @@ Quang hợp diễn ra ở bào quan nào của tế bào lá? | Lục lạp | Ty
 Chất hữu cơ mà lá cây chế tạo ra khi quang hợp chủ yếu là gì? | Tinh bột | Chất đạm | Chất béo | Muối khoáng
 Rừng mưa nhiệt đới có khí hậu như thế nào? | Nóng ẩm, mưa nhiều | Lạnh và khô | Nóng và khô | Lạnh và ẩm
 Hệ sinh thái nào được ví là "rừng mưa nhiệt đới của đại dương"? | Rạn san hô | Rừng tảo bẹ | Đồng cỏ biển | Rừng ngập mặn
-Trong hệ sinh thái, sinh vật phân giải xác chết chủ yếu là gì? | Vi khuẩn và nấm | Cây xanh | Động vật ăn cỏ | Thú ăn thịt
+Trong hệ sinh thái, sinh vật phân giải xác sinh vật chủ yếu là gì? | Vi khuẩn và nấm | Cây xanh | Động vật ăn cỏ | Thú ăn thịt
 Trong chuỗi thức ăn, cây xanh đóng vai trò gì? | Sinh vật sản xuất | Sinh vật tiêu thụ | Sinh vật phân giải | Kẻ săn mồi
 Ngày Môi trường thế giới là ngày nào? | 5 tháng 6 | 22 tháng 4 | 21 tháng 3 | 1 tháng 6
 Chiến dịch Giờ Trái Đất kêu gọi mọi người làm gì? | Tắt đèn một giờ | Trồng một cây | Đi bộ một giờ | Nhặt rác ven biển
@@ -193,7 +193,7 @@ Loài ốc ngoại lai nào gây hại lúa nặng nề ở nước ta? | Ốc b
 Cây nào cụp lá lại khi bị chạm vào? | Cây xấu hổ | Cây bàng | Cây phượng | Cây keo
 Cá chuồn có khả năng đặc biệt gì? | Lướt bay trên mặt nước | Leo lên cây | Đổi màu da | Phát sáng
 Rắn hổ mang khi bị đe dọa thường làm gì? | Bạnh cổ, dựng đầu | Cuộn tròn giả chết | Rụng đuôi | Phun mực
-Loài rắn lớn nào giết mồi bằng cách quấn siết chứ không dùng nọc? | Con trăn | Hổ mang | Rắn lục | Cạp nong
+Loài rắn lớn nào bắt mồi bằng cách quấn siết chứ không dùng nọc? | Con trăn | Hổ mang | Rắn lục | Cạp nong
 Ấu trùng ve sầu sống nhiều năm ở đâu? | Dưới lòng đất | Trong nước | Trên lá cây | Trong tổ chim
 Ở loài muỗi, con nào hút máu để lấy chất nuôi trứng? | Muỗi cái | Muỗi đực | Muỗi non | Muỗi già
 Thức ăn chủ yếu của chuồn chuồn là gì? | Côn trùng nhỏ | Mật hoa | Lá cây | Hạt cỏ

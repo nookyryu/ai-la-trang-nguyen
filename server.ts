@@ -2,7 +2,7 @@
  * Server chung cho mọi game live TikTok. Game riêng KHÔNG cần sửa file này,
  * trừ khi cần thêm API mới (thêm vào cuối, chỗ "API riêng của game").
  *
- * - Kết nối phòng live TikTok (tiktok-live-connector 2.x, proto v3)
+ * - Kết nối phòng live TikTok qua ttl-live tự host (thư mục ttl-live/, ẩn danh, không EulerStream)
  * - Đẩy sự kiện xuống trình duyệt qua SSE: /api/tiktok/events
  * - Lệnh từ trang điều khiển -> trang stage: /api/control
  * - Giọng đọc tiếng Việt: /api/tts (Edge TTS, lỗi thì Google)
@@ -12,8 +12,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { TikTokLiveConnection, WebcastEvent, ControlEvent } from 'tiktok-live-connector';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
 
 dotenv.config();
@@ -65,7 +64,7 @@ let sseClients: express.Response[] = [];
 // khi lỡ có 2 nguồn Link trong LIVE Studio hoặc mở thêm ?view=stage ở trình duyệt khác.
 let stageIds: string[] = [];
 const announceSpeaker = () => broadcast('speaker', { id: stageIds[stageIds.length - 1] ?? null, count: stageIds.length });
-let activeConn: InstanceType<typeof TikTokLiveConnection> | null = null;
+let activeConn: { disconnect: () => void } | null = null; // kết nối ttl-live đang chạy
 let lastRateControl: { action: string; text: string } | null = null;
 
 // Tên kênh (giọng đọc + tiêu đề) lưu ở settings.json cạnh file này, tắt server mở lại vẫn còn
@@ -139,10 +138,14 @@ app.get('/api/tiktok/events', (req, res) => {
 
 app.get('/api/tiktok/status', (_req, res) => res.json({ success: true, data: liveStats }));
 
-// ---------- Đọc dữ liệu TikTok (proto v3) ----------
-const userOf = (data: any) => data?.user?.displayId || data?.user?.uniqueId || data?.uniqueId || 'nguoi-xem';
-const nickOf = (data: any) => data?.user?.nickname || data?.nickname || data?.uniqueId || 'Bạn';
-const avatarOf = (data: any) => data?.user?.avatarThumb?.urlList?.[0] || '';
+// ---------- Đọc dữ liệu TikTok qua ttl-live (2026-11-14) ----------
+// Bỏ tiktok-live-connector: đường ký của nó qua EulerStream bị chặn ("Anonymous access is not available
+// from your network", lỗi 401). ttl-live (MIT, chép từ tool Đám Cưới) tự ký bằng webmssdk của TikTok ngay
+// trong máy, KHÁCH ẨN DANH (sessionCookie ép rỗng), không key, không phí.
+const TTL_DIR = path.join(__dirname, 'ttl-live');
+const userOf = (u: any) => u?.uniqueId || 'nguoi-xem';
+const nickOf = (u: any) => u?.nickname || u?.uniqueId || 'Bạn';
+const avatarOf = (u: any) => u?.avatarUrl || '';
 
 // ---------- Tự kết nối lại (treo live cả ngày) ----------
 // Rớt kết nối / hết phiên live / chưa live: thử lại sau 15 giây, rồi 30, 60, tối đa 2 phút một lần, cho tới khi được.
@@ -198,131 +201,145 @@ async function connectTikTok(cleanUser: string) {
   liveStats = { ...emptyStats(), isConnecting: true, username: cleanUser };
   broadcast('status', liveStats);
 
-  const conn = new TikTokLiveConnection(cleanUser, {
-    processInitialData: true,
-    // Lấy danh sách quà cần gói trả phí Euler Stream; sự kiện quà đã có tên và kim cương
-    enableExtendedGiftInfo: false,
+  const { TikTokLive, NotLiveError, classifySocialAction } = await import(
+    pathToFileURL(path.join(TTL_DIR, 'dist', 'index.js')).href
+  );
+  const live = new TikTokLive(cleanUser, {
+    sessionCookie: '', // ép ẩn danh: không bao giờ dùng cookie/session của tài khoản thật
+    bundlePath: path.join(TTL_DIR, 'webmssdk.js'),
   });
+  // ngắt chủ động (kết nối mới thay kết nối cũ, hoặc bấm Ngắt) thì không tự nối lại
+  let intentional = false;
+  const self = {
+    disconnect: () => {
+      intentional = true;
+      try {
+        live.disconnect();
+      } catch {
+        // bỏ qua
+      }
+    },
+  };
 
-  conn.on(ControlEvent.CONNECTED, (state: { roomId?: string }) => {
-    console.log(`[TikTok] Đã kết nối @${cleanUser}, room ${state?.roomId}`);
-    liveStats = { ...liveStats, isConnected: true, isConnecting: false, roomId: state?.roomId || '', error: '' };
+  live.on('connected', (state: any) => {
+    console.log(`[TikTok] Đã kết nối @${cleanUser} qua ttl-live (ẩn danh), room ${state?.roomId || live.roomId}`);
+    liveStats = { ...liveStats, isConnected: true, isConnecting: false, roomId: state?.roomId || live.roomId || '', error: '' };
     broadcast('status', liveStats);
     reconnectTries = 0;
   });
 
-  // kết nối cũ bị thay bằng kết nối mới thì không tự nối lại (activeConn đã khác)
-  conn.on(ControlEvent.DISCONNECTED, () => {
-    console.log(`[TikTok] Mất kết nối @${cleanUser}`);
-    if (activeConn !== conn) return;
-    liveStats = { ...liveStats, isConnected: false, isConnecting: false };
-    broadcast('status', liveStats);
-    scheduleReconnect('Mất kết nối TikTok');
-  });
-
-  conn.on(WebcastEvent.STREAM_END, () => {
-    if (activeConn !== conn) return;
-    liveStats = { ...liveStats, isConnected: false, isConnecting: false, error: 'Phiên live đã kết thúc' };
-    broadcast('status', liveStats);
-    scheduleReconnect('Phiên live đã kết thúc');
-  });
-
-  conn.on(WebcastEvent.CHAT, (data: any) => {
+  live.on('chat', (d: any) => {
     broadcast('chat', {
-      username: userOf(data),
-      nickname: nickOf(data),
-      comment: data?.content || data?.comment || '', // proto v3: chữ nằm ở `content`
-      avatar: avatarOf(data),
+      username: userOf(d.user),
+      nickname: nickOf(d.user),
+      comment: d.comment || '',
+      avatar: avatarOf(d.user),
       timestamp: Date.now(),
-      // giờ TikTok gắn lúc người xem gửi (ms): xếp ai trả lời nhanh nhất theo giờ này, không theo lúc bot nhận
-      createTime: Number(data?.common?.createTime) || Date.now(),
+      // ttl-live không có giờ gửi gốc của TikTok: xếp ai trả lời nhanh theo giờ server nhận
+      createTime: Date.now(),
     });
   });
 
   // TikTok gửi lại quà combo với repeatCount cộng dồn; chỉ chuyển phần mới
   const streakCounts = new Map<string, number>();
-  conn.on(WebcastEvent.GIFT, (data: any) => {
-    const username = userOf(data);
-    const giftId = data?.giftId || 0;
+  live.on('gift', (d: any) => {
+    const username = userOf(d.user);
+    const giftId = Number(d.giftId) || 0; // ttl-live cho giftId dạng chuỗi
     const key = `${username}_${giftId}`;
-    const total = data?.repeatCount || 1;
+    const total = d.repeatCount || 1;
     const delta = total - (streakCounts.get(key) || 0);
-    const isStreakable = (data?.gift?.type ?? data?.giftDetails?.giftType ?? data?.giftType) === 1;
-    if (isStreakable && !data?.repeatEnd) streakCounts.set(key, total);
+    if (d.streakable === true && !d.repeatEnd) streakCounts.set(key, total);
     else streakCounts.delete(key);
     if (delta <= 0) return;
 
     broadcast('gift', {
       username,
-      nickname: nickOf(data),
-      giftName: data?.gift?.name || data?.giftDetails?.giftName || data?.giftName || 'Quà',
+      nickname: nickOf(d.user),
+      giftName: d.giftName || 'Quà',
       giftId,
-      diamondCount: data?.gift?.diamondCount || data?.diamondCount || data?.giftDetails?.diamondCount || 1,
+      diamondCount: d.diamondCount || 1,
       repeatCount: delta,
-      avatar: avatarOf(data),
+      avatar: avatarOf(d.user),
       timestamp: Date.now(),
     });
   });
 
-  conn.on(WebcastEvent.MEMBER, (data: any) => {
-    broadcast('member', { username: userOf(data), nickname: nickOf(data), avatar: avatarOf(data), timestamp: Date.now() });
+  live.on('member', (d: any) => {
+    broadcast('member', { username: userOf(d.user), nickname: nickOf(d.user), avatar: avatarOf(d.user), timestamp: Date.now() });
   });
 
-  conn.on(WebcastEvent.FOLLOW, (data: any) => {
-    broadcast('follow', { username: userOf(data), nickname: nickOf(data), avatar: avatarOf(data), timestamp: Date.now() });
+  // ttl-live gộp follow + share vào sự kiện social
+  live.on('social', (d: any) => {
+    const kind = classifySocialAction(d.action)?.kind;
+    if (kind !== 'follow' && kind !== 'share') return;
+    broadcast(kind, { username: userOf(d.user), nickname: nickOf(d.user), avatar: avatarOf(d.user), timestamp: Date.now() });
   });
 
-  conn.on(WebcastEvent.SHARE, (data: any) => {
-    broadcast('share', { username: userOf(data), nickname: nickOf(data), avatar: avatarOf(data), timestamp: Date.now() });
-  });
-
-  conn.on(WebcastEvent.ROOM_USER, (data: any) => {
-    if (typeof data?.viewerCount === 'number') {
-      liveStats.viewerCount = data.viewerCount;
-      broadcast('roomUser', { viewerCount: data.viewerCount });
+  live.on('roomUser', (d: any) => {
+    if (typeof d?.viewers === 'number') {
+      liveStats.viewerCount = d.viewers;
+      broadcast('roomUser', { viewerCount: d.viewers });
     }
   });
 
-  conn.on(WebcastEvent.LIKE, (data: any) => {
-    if (typeof data?.totalLikeCount === 'number') liveStats.totalLikes = data.totalLikeCount;
+  live.on('like', (d: any) => {
+    if (typeof d?.total === 'number') liveStats.totalLikes = d.total;
     broadcast('like', {
-      username: userOf(data),
-      nickname: nickOf(data),
-      likeCount: data?.likeCount || 1,
+      username: userOf(d.user),
+      nickname: nickOf(d.user),
+      likeCount: d.count || 1,
       totalLikes: liveStats.totalLikes,
     });
   });
 
-  conn.on(ControlEvent.ERROR, (err: unknown) => {
+  live.on('reconnecting', (r: any) => {
+    if (intentional) return;
+    console.log(`[TikTok] Mất sóng @${cleanUser}, ttl-live đang tự nối lại (lần ${r?.attempt})`);
+    liveStats = { ...liveStats, isConnected: false, isConnecting: true };
+    broadcast('status', liveStats);
+  });
+
+  // ttl-live tự nối lại hết lượt mà vẫn rớt (hoặc hết phiên live): game tự thử lại theo lịch 15s → 2 phút
+  live.on('disconnected', () => {
+    if (intentional || activeConn !== self) return;
+    console.log(`[TikTok] Mất kết nối @${cleanUser}`);
+    activeConn = null;
+    liveStats = { ...liveStats, isConnected: false, isConnecting: false };
+    broadcast('status', liveStats);
+    scheduleReconnect('Mất kết nối TikTok');
+  });
+
+  live.on('error', (err: unknown) => {
+    if (intentional) return;
     const msg = err instanceof Error ? err.message : String(err);
     console.warn(`[TikTok] Lỗi @${cleanUser}:`, msg);
     liveStats.error = msg;
     broadcast('status', liveStats);
   });
 
-  activeConn = conn;
+  activeConn = self;
 
   try {
-    // Chưa LIVE thì thư viện có thể treo mãi ở "Đang kết nối": hỏi TikTok trước, báo lỗi ngay
-    const live = await conn.fetchIsLive().catch(() => true); // hỏi lỗi thì cứ thử kết nối
-    if (!live) throw new Error('TikTok báo tài khoản này CHƯA LIVE. Bấm Phát trực tiếp trong LIVE Studio trước rồi mới kết nối');
-    return await Promise.race([
-      conn.connect(),
+    const state: any = await Promise.race([
+      live.connect(),
       new Promise<never>((_, reject) => setTimeout(() => reject(new Error('quá 30 giây không vào được phòng live')), 30_000)),
     ]);
+    liveStats = { ...liveStats, isConnected: true, isConnecting: false, roomId: live.roomId || state?.roomId || '', error: '' };
+    broadcast('status', liveStats);
+    return { roomId: liveStats.roomId };
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
+    const raw = err instanceof Error ? err.message : String(err);
+    const msg =
+      err instanceof NotLiveError || /not live|no live/i.test(raw)
+        ? 'TikTok báo tài khoản này CHƯA LIVE. Bấm Phát trực tiếp trong LIVE Studio trước rồi mới kết nối'
+        : raw;
     liveStats = { ...liveStats, isConnected: false, isConnecting: false, error: msg };
     broadcast('status', liveStats);
-    if (activeConn === conn) {
-      try {
-        conn.disconnect();
-      } catch {
-        // bỏ qua
-      }
+    if (activeConn === self) {
+      self.disconnect();
       activeConn = null;
     }
-    throw err;
+    throw new Error(msg);
   }
 }
 
@@ -533,9 +550,17 @@ const ttsCache = new Map<string, Buffer>();
 const VIENEU_URL = process.env.VIENEU_URL || 'http://127.0.0.1:8000';
 const VIENEU_VOICE = process.env.VIENEU_VOICE ?? 'Adam bựa';
 const vieneuCache = new Map<string, Buffer>();
+
+// Trạng thái giọng đọc gần nhất
+let lastTtsState: { giong: 'vieneu' | 'edge' | 'google' | null; luc: number } = {
+  giong: null,
+  luc: Date.now(),
+};
+
 async function vieneuTts(text: string, res: express.Response): Promise<boolean> {
   const cached = vieneuCache.get(text);
   if (cached) {
+    lastTtsState = { giong: 'vieneu', luc: Date.now() };
     res.setHeader('Content-Type', 'audio/wav');
     res.send(cached);
     return true;
@@ -560,8 +585,9 @@ async function vieneuTts(text: string, res: express.Response): Promise<boolean> 
       res.write(b);
     }
     res.end();
+    lastTtsState = { giong: 'vieneu', luc: Date.now() };
     vieneuCache.set(text, Buffer.concat(parts));
-    if (vieneuCache.size > 100) vieneuCache.delete(vieneuCache.keys().next().value!);
+    if (vieneuCache.size > 300) vieneuCache.delete(vieneuCache.keys().next().value!);
     return true;
   } catch (err) {
     clearTimeout(timer);
@@ -588,12 +614,16 @@ app.get('/api/tts', async (req, res) => {
     if (!audio) {
       try {
         audio = await edgeTts(text, rate);
+        lastTtsState = { giong: 'edge', luc: Date.now() };
       } catch (err) {
         console.warn('Edge TTS lỗi, chuyển Google:', err instanceof Error ? err.message : err);
         audio = await googleTts(text);
+        lastTtsState = { giong: 'google', luc: Date.now() };
       }
       ttsCache.set(key, audio);
       if (ttsCache.size > 200) ttsCache.delete(ttsCache.keys().next().value!);
+    } else {
+      lastTtsState = { giong: 'edge', luc: Date.now() };
     }
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Cache-Control', 'public, max-age=86400');
@@ -602,6 +632,10 @@ app.get('/api/tts', async (req, res) => {
     console.error('TTS lỗi:', err);
     res.status(500).json({ error: 'TTS failed' });
   }
+});
+
+app.get('/api/tts/trang-thai', (_req, res) => {
+  res.json(lastTtsState);
 });
 
 // ---------- API riêng của game: thêm bên dưới ----------

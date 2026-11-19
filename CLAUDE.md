@@ -7,23 +7,25 @@
 
 Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông đồ cầm mic làm quan chủ khảo, người xem gõ A, B, C, D vào bình luận. Một ván 20 câu qua 4 kỳ thi, cuối ván 3 người cao điểm nhất đỗ Trạng Nguyên, Bảng Nhãn, Thám Hoa. Lấy cảm hứng từ Ai là triệu phú nhưng không dùng tên, giao diện, nhạc hay câu thoại của show đó.
 
-## Luật chơi
+## Luật chơi (Mùa 2: Trạng Nguyên Muôn Môn)
 
 - Ai cũng chơi được, không cần gõ từ khoá tham gia. Gõ đáp án là có tên trong trường thi.
-- 4 kỳ thi, mỗi kỳ 5 câu (`GAME.vong` trong config.ts):
-  Khảo hạch trường làng 10 giây +100 / −50 · Thi Hương 15 giây +200 / −100 · Thi Hội 20 giây +300 / −150 · Thi Đình 25 giây +500 / −250.
-- Mỗi kỳ: 4 câu viết sẵn + 1 câu toán tự sinh ở vị trí thứ 3 (khó dần: cộng trừ 2 chữ số, nhân/cộng số lớn, nhân 2 chữ số/chia, phép tính 2 bước). Thi Đình: 2 câu [dinh] + 2 câu đố mẹo [meo] + 1 toán.
-- Điểm tốc độ: đúng ngay giây đầu được tối đa, sát giờ được 50% (`diemSan`). Tính theo giờ TikTok gắn lúc gửi (`createTime`), không theo lúc server nhận.
-- Sai bị trừ nửa điểm tối đa của kỳ; tổng điểm không xuống dưới 0. Không trả lời thì 0 điểm.
+- **16 câu, 4 kỳ × 4 câu** (`GAME.vong` trong `config.ts`):
+  Khảo hạch trường làng (10s, +100/−50, mức 1–2) · Thi Hương (15s, +200/−100, mức 2–3) · Thi Hội (20s, +300/−150, mức 3–4) · Thi Đình (25s, +500/−250, mức 4–5). Trong mỗi kỳ, câu sau không dễ hơn câu trước.
+- **7 môn + Đố mẹo + Toán nhanh**: Lịch sử, Địa lý, Khoa học, Hóa học, Văn học, Văn hóa, Xã hội, Đố mẹo, và 1 câu **Toán nhanh** tự sinh ở Kỳ 2 (vị trí thứ 3).
+- **Vòng quay môn học**: trước mỗi câu (pha `quay`, ~2,4 giây) vòng quay quay rồi dừng ở môn của câu. Mỗi môn tối đa 3 câu/ván, không 2 câu liền cùng môn (kể cả qua ranh giới kỳ); Đố mẹo chỉ ở Kỳ 3–4, tối đa 2 câu/ván.
+- **Câu 16 ("Câu hỏi Trạng Nguyên")**: mức 5, điểm cộng và trừ đều ×2 (`latKeoNhan`), thay "Nước rút ×2" ở câu 20 cũ.
+- **Bạn có biết?**: sau khi công bố đáp án, hiện thẻ "💡 BẠN CÓ BIẾT?" 1–2 câu giải thích thú vị, ông đồ đọc (tạo trước giọng cả ván). Câu cũ không có giải thích thì bỏ qua thẻ.
+- **Danh hiệu môn**: hết ván, ai đúng nhiều nhất mỗi môn (≥ 2 câu đúng, bằng thì tổng thời gian trả lời đúng môn đó nhanh hơn) được phong **Trạng Sử, Trạng Địa, Trạng Khoa, Trạng Hóa, Trạng Văn, Trạng Phong Tục, Trạng Đời, Trạng Mẹo** — hiện ở Bảng vàng + màn Vinh quy, ông đồ xướng danh.
+- Điểm tốc độ: đúng ngay giây đầu được tối đa, sát giờ được 50% (`diemSan`). Sai trừ nửa điểm tối đa của kỳ, tổng điểm không xuống dưới 0. Không trả lời thì 0 điểm.
 - Đúng liền 3 câu thì +100 (`chuoiMoi`, `chuoiThuong`); sai hoặc bỏ câu thì chuỗi tính lại.
 - Mỗi người chỉ tính lần trả lời đầu tiên của câu. Nhận "a", "C.", "đáp án b", "chọn D", "câu c".
 - Quan chủ khảo đọc xong đề và 4 đáp án thì 4 ô mới hiện và mới tính giờ. Gửi trước lúc hiện quá 0,5 giây thì không tính, không mất lượt.
 - Đang hỏi không hiện tỉ lệ từng đáp án (tránh người vào sau chép số đông), chỉ hiện số người đã nộp. Tỉ lệ hiện lúc công bố đáp án.
 - Bằng điểm: ai có tổng thời gian trả lời đúng ngắn hơn xếp trên, rồi tới ai vào trước.
 - Danh hiệu theo hạng: 1 Trạng Nguyên, 2 Bảng Nhãn, 3 Thám Hoa, 4-10 Tiến sĩ, 11-15 Cử nhân, 16-20 Tú tài.
-- Hết mỗi kỳ thi hiện Bảng vàng top 20 (9 giây, "Người mới vào vẫn kịp thi kỳ sau"). Hết ván: màn Vinh quy bái tổ 15 giây, rồi đếm ngược 15 giây sang ván mới (game tự chạy cả buổi).
+- Hết mỗi kỳ thi hiện Bảng vàng top 20 + dẫn đầu chuyên môn (9 giây). Hết ván: màn Vinh quy 18 giây (Tam khôi + Phong Trạng chuyên môn), rồi đếm ngược 15 giây sang ván mới.
 - Quà KHÔNG cho lợi thế gì trong game (TikTok cấm khuyến khích tặng quà), chỉ cảm ơn.
-- Một ván khoảng 11-12 phút (ước lượng, chưa đo trên live).
 
 ## File
 
@@ -33,11 +35,11 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - `src/game/GameStage.tsx`: màn hình 1080x1920 vẽ đè lên `public/assets/bg/nen.jpg`. Toạ độ khung câu hỏi x 165-917, y 642-1059.
 - `src/game/sfx.ts`: âm thanh tự tạo kiểu khoa cử (trống chầu mở kỳ, đàn tranh rải khi hiện đáp án, gảy nhỏ khi có người nộp, mõ 5 giây cuối, chiêng công bố, vuốt đàn lên/xuống đúng/không ai đúng, pháo + chiêng vinh quy) và nhạc nền ngũ cung Rê 92 BPM (nhỏ khi ông đồ nói, dồn 5 giây cuối, tắt lúc vinh quy). Bỏ mp3 cùng tên vào public/assets/sfx/ là dùng file thay.
 - `src/game/GameControls.tsx`: nút "Bắt đầu ván mới", "Bỏ câu này", giả lập 1 / 60 / 500 người.
-- `src/game/cau-hoi/*.txt`: 4974 câu, 14 file theo chủ đề (cách viết: `cau-hoi/HUONG-DAN.md`). Nhóm [de] [vua] [kho] [dinh] [meo]. Kiểm tra: `node tools/kiem-tra-cau-hoi.mjs`. Câu toán do `src/game/toan.ts` tự sinh. Nút "Bỏ câu này" đẩy câu xuống cuối hàng vĩnh viễn (lưu data/da-hoi.json).
+- `src/game/cau-hoi-moi/*.txt`: 465 câu mới Mùa 2 (8 file theo môn, mức `[1]`–`[5]`, định dạng 6 cột có "Bạn có biết?"). Game ưu tiên câu mới chưa hỏi; hết câu mới chưa hỏi mới lấy kho dự phòng `src/game/cau-hoi/*.txt` (4.974 câu, tự quy đổi `[de]→1, [vua]→2, [kho]→3, [dinh]→4–5, [meo]→Đố mẹo`). Kiểm tra cả 2 kho: `node tools/kiem-tra-cau-hoi.mjs`. Nạp kho chung + bảng thống kê: `src/game/nganHang.ts`. Biểu tượng SVG động 9 môn: `src/game/MonIcon.tsx`. Câu Toán nhanh do `src/game/toan.ts` tự sinh ở Kỳ 2. Nút "Bỏ câu này" đẩy câu xuống cuối hàng vĩnh viễn (lưu `data/da-hoi.json`).
 - `data/da-hoi.json`: câu nào hỏi lúc nào, game ưu tiên câu lâu chưa hỏi.
 - Ông đồ MC: ảnh gốc `public/assets/MC/` (nền trắng), tách nền bằng `node tools/tach-nen.mjs` ra `public/assets/nv/mc/` (mung, suy-nghi, chi, cuoi, tiec).
 - Ảnh nền gốc `ai-la-trang-nguyen.png` (1536x2752, đã xoá logo sao Gemini góc phải dưới khi xuất `nen.jpg`).
-- Giọng đọc: VieNeu-TTS giọng "Adam bựa" (E:_AIVieNeu-TTS, server cổng 8000, BAT-LIVE tự mở cửa sổ "Giọng VieNeu"). VieNeu tắt hoặc lỗi thì tự dùng giọng Edge NamMinh. Đổi giọng: biến VIENEU_VOICE; để trống = chỉ Edge.
+- Giọng đọc: VieNeu-TTS giọng "Adam bựa" (D:\02_AI\VieNeu-TTS, server cổng 8000, BAT-LIVE tự mở cửa sổ "Giọng VieNeu"). VieNeu tắt hoặc lỗi thì tự dùng giọng Edge NamMinh. Đổi giọng: biến VIENEU_VOICE; để trống = chỉ Edge.
 - Cổng **3007** (BAT-LIVE.bat). Link LIVE Studio: http://lvh.me:3007/?view=stage. Thử trong khung preview của Claude: cổng 3507, mở `?view=stage&mute=1` (không phát tiếng).
 
 ## Quyết định của chủ kênh
@@ -72,4 +74,12 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Sĩ tử (2026-11-08): ai đã nộp bài được ngồi bàn (tối đa `soGhe` 31, ngồi từ hàng đầu), điểm cao ngồi các hàng giữa trước. Quay LƯNG ra khán giả (ảnh vật lưng lung-nam / lung-nu của chủ kênh), chỉ lộ nửa người trên khỏi mặt bàn, bảng tên trên đầu tự thu nhỏ chữ cho vừa (tên quá dài mới cắt). Dùng cách một hàng bàn để bảng tên hàng trước không che mặt hàng sau. Lúc công bố người đúng nhảy lên, điểm +/- bay trên đầu. Ảnh: `public/assets/nhan-vat/` → `node tools/cat-nhan-vat.mjs` → `public/assets/nv/lang/`.
 - Cảnh vật (2026-11-08): ông đồ bên trái bảng đen có bảng tên (đổi được); 6 cụ: già làng + ông cầm quạt ở sân trống bên phải cạnh cột bảng, bà nón + bà cuốc mép phải, ông gậy + bà ôm gói mép trái dưới ông đồ; đám 6 đứa trẻ yếm đỏ chạy lên xuống lối giữa, mỗi đứa mang tên 1 người chưa có ghế (người thi mà hết ghế, rồi người vừa bình luận), `soTre` 6; tán đa lắc nhẹ theo gió, lá đa rơi lác đác.
 - Trang điều khiển có ô sửa "Chữ trên mái tranh" và "Tên ông đồ" (lưu settings.json qua /api/cai-dat, để trống = mặc định trong config.ts). Sửa server.ts nên phải tắt bật lại BAT-LIVE mới có.
+- Nền theo kỳ thi (chủ kênh duyệt 4 ảnh, 2026-11-14): mỗi kỳ sang hơn, đổi địa điểm. Khảo hạch = sân trường làng (`nen2.jpg`) → Thi Hương = cùng sân làng nắng vàng + cờ ngũ sắc và đôi lọng đỏ chuyển động (`GAME.trangTri`, ảnh `public/assets/trang-tri/`) → Thi Hội = trường thi Huyện Phủ → Thi Đình = Hoàng thành Kinh Đô có thảm đỏ. Kỳ 3 và 4 là ảnh AI vẽ toàn cảnh, phong cách tranh vẽ, khác kỳ 1–2 (chủ kênh đã biết và duyệt). Tán đa và lá rơi chỉ có ở kỳ 1–2. Sau câu hỏi và đáp án có khung gỗ đen mờ viền vàng để chữ dễ đọc. Khai báo ở `GAME.nenKy`. Chuyển mờ 1,2 giây; trang điều khiển có nút "Xem nền". Ảnh chụp kiểm tra: `node tools/chup-anh-kiem-tra-nen.mjs` → `docs/kiem-tra-nen/`. Ảnh gốc và trang trí chưa dùng: `docs/trang-tri-goc/`. Lịch sử: `docs/task-cu/2026-11-14-vieneu-nen-nang-cap/`.
+- Lọc câu hỏi theo luật TikTok (2026-11-14): `tools/kiem-tra-cau-hoi.mjs` có danh sách từ CẤM (báo lỗi), CẦN XEM (cảnh báo), ngoại lệ, `--csv`. Đã viết lại 19 câu (chém/giết/ám sát/tự thiêu → tử trận, cướp ngôi…), giữ đủ 4.974 câu. "Hà thành đầu độc" và "Chiến tranh thuốc phiện" giữ nguyên vì là tên sự kiện trong SGK (nằm trong danh sách ngoại lệ). Lịch sử: TASK/REPORT ở `docs/task-cu/2026-11-14-nen-cau-hoi-giong/`.
+- Giọng đọc trên máy (2026-11-14): Đã tắt Smart App Control, cài đặt VieNeu-TTS v3 Turbo tại D:\02_AI\VieNeu-TTS qua uv (CPython 3.12, PyTorch CUDA 12.8 trên RTX 4060). Giọng chính: "Adam bựa" có tiếng cười/thở dài/hắng giọng, chạy server cổng 8000 (BAT-LIVE tự mở). Fallback tự động: Edge Neural (NamMinh) khi VieNeu tắt.
+- Tạo trước giọng cả ván (chủ kênh duyệt, 2026-11-14): không muốn chờ tạo giọng lúc live. Vừa vào ván (`batDau`), trang stage chính tạo trước đề + lời công bố của cả 20 câu, câu 1 trước. Đã cân nhắc và BỎ cách tạo sẵn toàn bộ ra ổ đĩa (phải cố định thứ tự đáp án, tốn 2–3 GB, phải chạy lại mỗi lần sửa câu). Đáp án vẫn xáo mỗi ván. Trang điều khiển báo đang dùng giọng Adam bựa hay Edge. Câu có tên người vẫn tạo lúc chạy.
+- Kết nối TikTok qua ttl-live (2026-11-15): tiktok-live-connector bị EulerStream chặn ("Anonymous access is not available from your network", 401) dù tài khoản đang live. Đã thay bằng ttl-live chép từ tool Đám Cưới (thư mục `ttl-live/`, tự ký bằng webmssdk của TikTok, khách ẩn danh, không key, $0). Không xoá `ttl-live/` (có node_modules riêng, git không lưu; máy mới thì chạy `npm install` trong `ttl-live/`). ttl-live không có giờ gửi gốc của bình luận nên xếp ai trả lời nhanh theo giờ server nhận. Đã thử live thật: nhận được bình luận, tim, người vào phòng.
 - Chính sách TikTok (chủ kênh, 2026-11-08): không dùng chữ dính cá cược ("kèo"), không "đốt pháo" (dùng "pháo hoa"), câu hỏi không có chữ tự tử / tự vẫn / tuẫn tiết, tránh chữ bạo lực nặng (chặt đầu, xử chém), không có câu quảng bá rượu (câu nói tác hại của rượu, thuốc lá thì giữ).
+- Mùa 2 – "Trạng Nguyên Muôn Môn" (chủ kênh chốt, 2026-11-19): giữ nguyên ảnh chủ kênh vẽ (nền 4 kỳ, ông đồ, sĩ tử, tam khôi, trang trí), giọng Adam bựa và kết nối ttl-live. Làm mới thể lệ (16 câu, 4 kỳ × 4 câu, 5 mức độ khó không giảm trong kỳ, vòng quay môn học trước mỗi câu, 7 môn + Đố mẹo + 1 câu Toán nhanh ở Kỳ 2, Câu 16 "Câu hỏi Trạng Nguyên" mức 5 ×2, thẻ "Bạn có biết?" sau công bố, danh hiệu Trạng chuyên môn ở Bảng vàng + Vinh quy). Giao diện đổi sắc khung câu hỏi/đáp án và biểu tượng SVG động theo từng môn, thang độ khó 5 mức, đồng hồ tròn tiến độ, trang điều khiển có bảng đếm câu môn × mức. Bộ câu mới 465 câu trong `src/game/cau-hoi-moi/`, giữ 4.974 câu cũ làm kho dự phòng (ưu tiên câu mới chưa hỏi). Ảnh kiểm tra Mùa 2 lưu tại `docs/kiem-tra-mua2/`.
+- Rà câu Mùa 2 (Claude, 2026-11-19): thay 15 câu, sửa chữ 33 câu cho chắc sự thật (bảng chi tiết: `docs/task-cu/2026-11-19-mua-2/REPORT.md` mục Vòng 2). Luật rút ra khi viết câu mới: không hỏi giai thoại như sự thật (thêm "tương truyền"/"sử cũ chép"), không dùng danh xưng sai thời (Trạng nguyên trước 1247), không tự bịa con số trong "Bạn có biết?", tránh câu có 2 đáp án cùng đúng.
+- Bộ đệm Vite để ở thư mục Temp của Windows (`cacheDir` trong `vite.config.ts`, 2026-11-19) vì ổ D: không cho tài khoản thường xoá file trong `node_modules\.vite` → BAT-LIVE (chế độ dev) bị sập lỗi EPERM. Đừng đổi lại.

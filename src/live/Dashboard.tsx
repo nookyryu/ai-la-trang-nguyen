@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { LiveStatus } from './types';
 import { emitTest, sendControl } from './page';
 
@@ -31,6 +31,19 @@ export function Dashboard({
   const [msg, setMsg] = useState('');
   const [speakText, setSpeakText] = useState('');
   const [busy, setBusy] = useState(false);
+  const [ttsStatus, setTtsStatus] = useState<{ giong: 'vieneu' | 'edge' | 'google' | null; luc: number } | null>(null);
+
+  useEffect(() => {
+    const check = () => {
+      fetch('/api/tts/trang-thai')
+        .then((r) => r.json())
+        .then((st) => setTtsStatus(st))
+        .catch(() => {});
+    };
+    check();
+    const timer = setInterval(check, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const connect = async () => {
     setBusy(true);
@@ -102,6 +115,15 @@ export function Dashboard({
           </Card>
 
           <Card title="Giọng đọc trên stage">
+            <div className="mb-3 rounded-lg bg-slate-800/80 px-3 py-2 text-sm font-semibold">
+              {!ttsStatus || ttsStatus.giong === null ? (
+                <span className="text-slate-400">🎙️ Chưa đọc câu nào</span>
+              ) : ttsStatus.giong === 'vieneu' ? (
+                <span className="text-emerald-400">🎙️ Giọng: Adam bựa</span>
+              ) : (
+                <span className="text-amber-400">⚠️ Đang dùng giọng Edge: VieNeu chưa bật hoặc bị lỗi</span>
+              )}
+            </div>
             <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
               <span>
                 Tên kênh: <b className="text-amber-300">{channelName}</b>

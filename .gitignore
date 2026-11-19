@@ -6,3 +6,5 @@ dist/
 .claude/settings.local.json
 settings.json
 data/
+canh-bao*.csv
+!ttl-live/dist/
