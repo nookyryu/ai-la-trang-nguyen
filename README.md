@@ -44,7 +44,7 @@ Cách dễ nhất:
 Nếu bạn đã dùng Git:
 
 ```bash
-git clone https://github.com/workaipvlinh-byte/ai-la-trang-nguyen.git
+git clone https://github.com/nookyryu/ai-la-trang-nguyen.git
 ```
 
 ### Bước 3: Chạy game
